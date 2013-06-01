@@ -27,4 +27,10 @@ If you publish the repo in the internet, you can then add the plugin as a depend
     }
     ...
 
-This is useful if you want to distribute only your plugin binaries or if you want your plugin to be precompiled (reasons might be speed or that it contains an AST transform that is used in other plugins).
+This is useful if you want to distribute only your plugin binaries or if you just want your plugin to be precompiled.
+Reasons for the later might be speed or that it contains an AST transform that is used by other plugins. Bear in mind
+that AST transforms are only applied if the are compiled before project compilation, so an uncompiled transform 
+in a plugin will be applied to the project but not to other plugins.
+
+Please note that if your plugin is also published in grails plugins official repository, you will need to declare
+your maven repo *above grailsPlugins*.
