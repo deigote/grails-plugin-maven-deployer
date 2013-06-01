@@ -33,4 +33,4 @@ that AST transforms are only applied if the are compiled before project compilat
 in a plugin will be applied to the project but not to other plugins.
 
 Please note that if your plugin is also published in grails plugins official repository, you will need to declare
-your maven repo *above grailsPlugins*.
+your maven repo **above grailsPlugins**.
