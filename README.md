@@ -26,3 +26,5 @@ If you publish the repo in the internet, you can then add the plugin as a depend
         compile 'com.deigote.com:timestamped:0.3'
     }
     ...
+
+This is useful if you want to distribute only your plugin binaries or if you want your plugin to be precompiled (reasons might be speed or that it contains an AST transform that is used in other plugins).
