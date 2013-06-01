@@ -1,7 +1,5 @@
 #!/bin/bash
 
-SCRIPT_HOME="`pwd`/`dirname $0`"
-
 if [ "$#" -lt 4 ] ; then
 	echo "Arguments missing! Usage: `basename $0` <plugin-home> <group-id> <plugin-name> <releases_dir>"
 	exit 1
@@ -22,8 +20,9 @@ cd "$PLUGIN_HOME"
 PLUGIN_VERSION=$(findInPluginDescription version)
 DESCRIPTION=$(findInPluginDescription description)
 JAR_FILENAME=grails-plugin-"$PLUGIN_NAME"-"$PLUGIN_VERSION".jar 
-SCRIPT_TMP="$SCRIPT_HOME/tmp.$$"
+SCRIPT_TMP="/tmp/`basename $0`.$$"
 DEST_FROM_GROUP="$(echo $GROUP_ID | tr '.' '/' )"
+TEMPLATE="`dirname $0`/template.pom"
 
 echo "Compiling and building plugin..."
 grails clean && grails compile && grails package-plugin --binary
@@ -32,12 +31,11 @@ if [ ! -f "target/$JAR_FILENAME" ] ; then
 	exit 1
 fi
 
-cd "$SCRIPT_HOME"
 mkdir "$SCRIPT_TMP"
 cd "$SCRIPT_TMP"
 
 echo "Generating pom from template..."
-cat ../template.pom | sed "s/_GROUP_ID_/$GROUP_ID/" | \
+cat "$TEMPLATE" | sed "s/_GROUP_ID_/$GROUP_ID/" | \
 	sed "s/_NAME_/$PLUGIN_NAME/" | \
 	sed "s/_VERSION_/$PLUGIN_VERSION/" | \
 	sed "s/_DESCRIPTION_/$DESCRIPTION/" > $PLUGIN_NAME.pom
