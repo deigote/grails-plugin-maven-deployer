@@ -16,15 +16,21 @@ function findInPluginDescription() {
 	echo "$RES"
 }
 
+function absolutePath() {
+	echo "$(cd $(dirname $1) && pwd)/$(basename $1)"
+}
+
+SCRIPT_TMP="/tmp/`basename $0`.$$"
+DEST_FROM_GROUP="$(echo $GROUP_ID | tr '.' '/' )"
+TEMPLATE="$(absolutePath `dirname $0`/template.pom)"
+DEST="$(absolutePath $DEST)"
+PLUGIN_HOME="$(absolutePath $PLUGIN_HOME)"
+
+echo "Compiling and building plugin..."
 cd "$PLUGIN_HOME"
 PLUGIN_VERSION=$(findInPluginDescription version)
 DESCRIPTION=$(findInPluginDescription description)
 JAR_FILENAME=grails-plugin-"$PLUGIN_NAME"-"$PLUGIN_VERSION".jar 
-SCRIPT_TMP="/tmp/`basename $0`.$$"
-DEST_FROM_GROUP="$(echo $GROUP_ID | tr '.' '/' )"
-TEMPLATE="`dirname $0`/template.pom"
-
-echo "Compiling and building plugin..."
 grails clean && grails compile && grails package-plugin --binary
 if [ ! -f "target/$JAR_FILENAME" ] ; then
 	echo "target/$JAR_FILENAME not found after building binary plugin, aborting..."
@@ -49,5 +55,4 @@ echo "Moving $DEST_FROM_GROUP/$PLUGIN_NAME to $DEST"
 
 mkdir -p $DEST/$DEST_FROM_GROUP
 cp -R $DEST_FROM_GROUP/$PLUGIN_NAME $DEST/$DEST_FROM_GROUP
-cd ..
-rm -r "$SCRIPT_TMP" 
+# rm -r "$SCRIPT_TMP" 
